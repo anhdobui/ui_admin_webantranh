@@ -12,8 +12,24 @@
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\""
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^37.0.1",
+    "@hookform/resolvers": "^3.0.0",
+    "@tanstack/react-query": "^4.28.0",
+    "@types/socket.io": "^3.0.2",
+    "@types/stompjs": "^2.3.5",
+    "axios": "^1.3.4",
+    "ckeditor4-react": "^4.2.0",
+    "jwt-decode": "^3.1.2",
+    "nanoid": "^4.0.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-router-dom": "^6.9.0",
+    "react-toastify": "^9.1.2",
+    "socket.io-client": "^4.6.1",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.2.3",

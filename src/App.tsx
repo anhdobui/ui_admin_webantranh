@@ -1,5 +1,15 @@
+import { useEffect } from 'react'
+import useRouteElements from './useRouteElements'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
-  return <h1>hello</h1>
+  const routeElements = useRouteElements()
+  return (
+    <div className='App '>
+      {routeElements}
+      <ToastContainer />
+    </div>
+  )
 }
 
 export default App
