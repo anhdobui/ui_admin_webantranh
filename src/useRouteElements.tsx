@@ -2,17 +2,22 @@ import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import Home from './pages/Home'
 import MainLayout from './layouts/MainLayout'
 import Product from './pages/Product'
-import Category from './pages/Category'
+import Category from './pages/Topic'
 import User from './pages/User'
 import ViewProduct from './pages/Product/ViewProduct'
 import FormProduct from './pages/Product/FormProduct'
-import ViewCategory from './pages/Category/ViewCategory'
-import FormCategory from './pages/Category/FormCategory'
+import ViewCategory from './pages/Topic/ViewCategory'
 import { TableProvider } from './contexts/table.context'
 import { CategoryProvider } from './contexts/category.context'
 import Login from './pages/Login/Login'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
+import ViewInventory from './pages/BillInventory/ViewInventory'
+import FormInventory from './pages/BillInventory/FormBillInventory'
+import BillInventory from './pages/BillInventory/BillInventory'
+import WareHouse from './pages/WareHouse'
+import Orders from './pages/Orders'
+import Customer from './pages/Customer'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -86,6 +91,50 @@ function useRouteElements() {
               <User />
             </MainLayout>
           )
+        },
+        {
+          path: '/orders',
+          element: (
+            <MainLayout>
+              <Orders />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/customer',
+          element: (
+            <MainLayout>
+              <Customer />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/warehouse',
+          element: (
+            <MainLayout>
+              <WareHouse />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/bill-inventory',
+          element: (
+            <MainLayout>
+              <BillInventory />
+            </MainLayout>
+          ),
+          children: [
+            {
+              path: '',
+              index: true,
+              element: <ViewInventory />
+            },
+            {
+              path: 'add',
+              index: true,
+              element: <FormInventory />
+            }
+          ]
         }
       ]
     },

@@ -4,10 +4,22 @@ interface SelectInfer {
   className?: string
   name: string
   control: Control<FieldValues>
-  option: { name: string; value: string }[]
+  option: { name: string; value: string | number }[]
   defaultValue?: string
+  label?: string
+  checkError?: boolean
+  errorMessage?: string | any
 }
-function Select({ className, option, name, control, defaultValue }: SelectInfer) {
+function Select({
+  className,
+  option,
+  name,
+  control,
+  defaultValue,
+  label,
+  checkError = false,
+  errorMessage
+}: SelectInfer) {
   const id = nanoid()
   const { field } = useController({
     control,
@@ -17,7 +29,7 @@ function Select({ className, option, name, control, defaultValue }: SelectInfer)
   return (
     <div className={className}>
       <label htmlFor={id} className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'>
-        Chọn tập tranh
+        {label}
       </label>
       <select
         id={id}
@@ -32,6 +44,7 @@ function Select({ className, option, name, control, defaultValue }: SelectInfer)
             </option>
           ))}
       </select>
+      {checkError && <div className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errorMessage}</div>}
     </div>
   )
 }

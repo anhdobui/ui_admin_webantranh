@@ -1,4 +1,3 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import FormTopic from 'src/component/FormProduct/FormTopic'
@@ -44,36 +43,42 @@ function ViewCategory() {
     setShowPopupEdit(false)
   }
   return (
-    <TableView btnPopup={true} data={dataTableCategory} buttonAdd='Thêm mới chủ đề'>
-      <Popup
-        title='Thêm mới chủ đề'
-        className='col-span-2 flex flex-wrap  items-center justify-end'
-        showPopup={showPopupAdd}
-        setShowPopup={setShowPopupAdd}
-      >
-        <ButtonOpenPopup
-          className='mb-2 h-11  flex-shrink-0 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'
-          labelBtn='Thêm mới chủ đề'
-        />
-        <PopupContent>
-          <FormTopic onSubmit={handleAddTopic} />
-        </PopupContent>
-      </Popup>
-      <Popup
-        title='Sửa chủ đề'
-        className='col-span-2 flex flex-wrap  items-center '
-        showPopup={showPopupEdit}
-        setShowPopup={setShowPopupEdit}
-      >
-        <ButtonOpenPopup
-          className='justify-items-start font-medium text-blue-600 hover:underline dark:text-blue-500'
-          labelBtn='Edit'
-        />
-        <PopupContent>
-          <FormTopic defaultData={{ title: 'chu de 1', description: 'day la mo ta' }} onSubmit={handleEditTopic} />
-        </PopupContent>
-      </Popup>
-    </TableView>
+    <TableView
+      data={dataTableCategory}
+      buttonAdd='Thêm mới chủ đề'
+      childrenAdd={
+        <Popup
+          title='Thêm mới chủ đề'
+          className='col-span-2 flex flex-wrap  items-center justify-end'
+          showPopup={showPopupAdd}
+          setShowPopup={setShowPopupAdd}
+        >
+          <ButtonOpenPopup
+            className='mb-2 h-11  flex-shrink-0 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'
+            labelBtn='Thêm mới chủ đề'
+          />
+          <PopupContent>
+            <FormTopic onSubmit={handleAddTopic} />
+          </PopupContent>
+        </Popup>
+      }
+      childrenEdit={
+        <Popup
+          title='Sửa chủ đề'
+          className='col-span-2 flex flex-wrap  items-center '
+          showPopup={showPopupEdit}
+          setShowPopup={setShowPopupEdit}
+        >
+          <ButtonOpenPopup
+            className='justify-items-start font-medium text-blue-600 hover:underline dark:text-blue-500'
+            labelBtn='Edit'
+          />
+          <PopupContent>
+            <FormTopic defaultData={{ title: 'chu de 1', description: 'day la mo ta' }} onSubmit={handleEditTopic} />
+          </PopupContent>
+        </Popup>
+      }
+    ></TableView>
   )
 }
 

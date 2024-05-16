@@ -4,7 +4,7 @@ import ComponentPortal from '../ComponentPortal/ComponentPortal'
 // Component ButtonOpenPopup
 interface ButtonOpenPopupProps {
   className?: string
-  labelBtn: string
+  labelBtn: string | ReactNode
   onClick?: () => void
 }
 

@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid'
 interface TextAreaInfer {
   className?: string
   placeholder?: string
-  label: string
+  label?: string
   name: string
   register: UseFormRegister<any>
 }

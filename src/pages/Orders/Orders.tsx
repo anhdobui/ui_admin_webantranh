@@ -1,12 +1,12 @@
 import { useContext, useEffect } from 'react'
 import { HeadingContext } from 'src/contexts/heading.context'
 
-function User() {
+function Orders() {
   const { setHeading } = useContext(HeadingContext)
   useEffect(() => {
-    setHeading('Thành viên')
+    setHeading('Đơn hàng')
   }, [setHeading])
-  return <h1>User page</h1>
+  return <></>
 }
 
-export default User
+export default Orders
