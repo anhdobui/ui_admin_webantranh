@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid'
 import React, { useState, useEffect } from 'react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
-import Grid from '../Grid/Grid'
 import MaskInputFile from './MaskInputFile'
 
 interface InputFileInfer {
@@ -11,13 +10,13 @@ interface InputFileInfer {
   register: UseFormRegister<any>
   setValue: UseFormSetValue<any>
   multiple?: boolean
+  defaultImages?: string[]
 }
 
-function InputFile({ className, label, register, setValue, name, multiple = false }: InputFileInfer) {
+function InputFile({ className, label, register, setValue, name, multiple = false, defaultImages }: InputFileInfer) {
   const id = nanoid()
   const [images, setImages] = useState<string[]>([])
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (files) {
@@ -30,8 +29,8 @@ function InputFile({ className, label, register, setValue, name, multiple = fals
         reader.onloadend = () => {
           newImages.push(reader.result as string)
           if (newImages.length === files.length) {
-            setImages((prevImages) => [...prevImages, ...newImages])
-            setSelectedFiles((prevFiles) => [...prevFiles, ...newSelectedFiles])
+            setImages((prevImages) => [...newImages])
+            setSelectedFiles((prevFiles) => [...newSelectedFiles])
           }
         }
 
@@ -39,8 +38,9 @@ function InputFile({ className, label, register, setValue, name, multiple = fals
       }
     }
   }
-
-  // Sử dụng useEffect để cập nhật giá trị của field trong form
+  useEffect(() => {
+    defaultImages && setImages(defaultImages)
+  }, [defaultImages, setImages])
   useEffect(() => {
     setValue(name, selectedFiles)
   }, [selectedFiles, setValue, name])

@@ -1,4 +1,4 @@
-export type DataTableType = {
+export type DataTableType<> = {
   label: Record<string, string>
-  dataRow: Array<Partial<Record<keyof DataTableType['label'] | 'id', string | number>>>
+  dataRow: [] | Array<Partial<Record<keyof DataTableType['label'] | 'id', string | number | undefined | null>>>
 }

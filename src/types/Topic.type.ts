@@ -1,4 +1,5 @@
-export interface TopicInf {
-  description?: string | undefined
+export type TopicType = {
+  id: number
   title: string
+  description: string
 }

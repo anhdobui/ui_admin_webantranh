@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { UseFormRegister } from 'react-hook-form'
 
-interface CheckboxData {
+export interface CheckboxData {
   id: number
   label: string
   isChecked: boolean

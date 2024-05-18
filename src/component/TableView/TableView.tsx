@@ -1,9 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { DataTableType } from 'src/types/DataTable.type'
 import ComponentPortal from '../ComponentPortal/ComponentPortal'
-import { useMutation } from '@tanstack/react-query'
-import { deleteArtwork } from 'src/apis/product/artwork.api'
 import { toast } from 'react-toastify'
 type TableViewType = {
   buttonAdd?: string
@@ -11,6 +9,8 @@ type TableViewType = {
   childrenAdd?: ReactNode | boolean
   childrenEdit?: ReactNode | boolean
   childrenDelete?: ReactNode | boolean
+  isLoading?: boolean
+  onDelete: (data: number[]) => Promise<boolean>
 }
 type ListDeleteType =
   | {
@@ -18,9 +18,8 @@ type ListDeleteType =
       [key: string]: boolean
     }
   | { all: boolean }
-function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete }: TableViewType) {
+function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete, isLoading, onDelete }: TableViewType) {
   const [isHiddenConfirmDelete, setIsHiddenConfirmDeletes] = useState(true)
-  const navigate = useNavigate()
   const [listDelete, setListDelete] = useState<any>({ all: false })
 
   useEffect(() => {
@@ -35,15 +34,30 @@ function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete 
         { all: false }
       )
     }))
-  }, [data.dataRow, setListDelete])
-  console.log(listDelete)
+  }, [data.dataRow])
   const handleShowConfirm = () => {
     setIsHiddenConfirmDeletes(false)
   }
   const handleCancelConfirm = () => {
     setIsHiddenConfirmDeletes(true)
   }
+  const handleDelete = () => {
+    const list = []
 
+    for (const key in listDelete) {
+      if (key != 'all' && listDelete[key]) {
+        list.push(Number(key))
+      }
+    }
+    onDelete(list)
+      .then((res) => {
+        console.log(res)
+        setIsHiddenConfirmDeletes(true)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
   return (
     <>
       {childrenDelete != false && (
@@ -63,7 +77,10 @@ function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete 
                   </div>
                 </div>
                 <div className='mt-4 text-center md:flex md:justify-end md:text-right'>
-                  <button className='block w-full rounded-lg bg-red-200 px-4 py-3 text-sm font-semibold text-red-700 md:order-2 md:ml-2 md:inline-block md:w-auto md:py-2'>
+                  <button
+                    onClick={() => handleDelete()}
+                    className='block w-full rounded-lg bg-red-200 px-4 py-3 text-sm font-semibold text-red-700 md:order-2 md:ml-2 md:inline-block md:w-auto md:py-2'
+                  >
                     Delete
                   </button>
                   <button
@@ -131,7 +148,25 @@ function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete 
             ))}
         </div>
       </div>
-      {data && (
+      {isLoading && (
+        <div role='status' className='mt-6 animate-pulse'>
+          <div className='mb-4 h-4  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10 rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <div className='h-10  rounded bg-gray-200 dark:bg-gray-700' />
+          <span className='sr-only'>Loading...</span>
+        </div>
+      )}
+      {!isLoading && data && (
         <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
           <table className='w-full text-left text-sm text-gray-500 dark:text-gray-400'>
             <thead className='bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400'>
@@ -171,68 +206,76 @@ function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete 
                 </th>
               </tr>
             </thead>
+
             <tbody>
-              {data.dataRow.map((item, index) => (
-                <tr
-                  key={item.id + '' + index}
-                  className='border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600'
-                >
-                  {childrenDelete != false && (
-                    <td className='w-4 p-4'>
-                      <div className='flex items-center'>
-                        <input
-                          id='checkbox-table-search-1'
-                          type='checkbox'
-                          className='h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800'
-                          checked={listDelete[item.id as string] || false}
-                          onChange={(e) => {
-                            console.log(listDelete[item.id as string])
-                            setListDelete((prev: any) => ({ ...prev, [item.id as string]: e.target.checked }))
-                          }}
-                        />
-                        <label htmlFor='checkbox-table-search-1' className='sr-only'>
-                          checkbox
-                        </label>
-                      </div>
-                    </td>
-                  )}
-                  {Object.keys(data.label).map((label) => {
-                    if (label == 'name') {
-                      return (
-                        <th
-                          key={label}
-                          scope='row'
-                          className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
-                        >
-                          {item['name']}
-                        </th>
-                      )
-                    } else if (label == 'thumbnail') {
+              {data.dataRow &&
+                data.dataRow.map((item, index) => (
+                  <tr
+                    key={item.id + '' + index}
+                    className='border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600'
+                  >
+                    {childrenDelete != false && (
+                      <td className='w-4 p-4'>
+                        <div className='flex items-center'>
+                          <input
+                            id='checkbox-table-search-1'
+                            type='checkbox'
+                            className='h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800'
+                            checked={listDelete[item.id as string] || false}
+                            onChange={(e) => {
+                              setListDelete((prev: any) => {
+                                const itemIsChecked = e.target.checked
+                                return {
+                                  ...prev,
+                                  [item.id as string]: itemIsChecked,
+                                  all: itemIsChecked ? prev['all'] : false
+                                }
+                              })
+                            }}
+                          />
+                          <label htmlFor='checkbox-table-search-1' className='sr-only'>
+                            checkbox
+                          </label>
+                        </div>
+                      </td>
+                    )}
+                    {Object.keys(data.label).map((label) => {
+                      if (label == 'name') {
+                        return (
+                          <th
+                            key={label}
+                            scope='row'
+                            className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
+                          >
+                            {item['name']}
+                          </th>
+                        )
+                      } else if (label == 'thumbnail') {
+                        return (
+                          <td key={label} className='px-6 py-4'>
+                            <img src={`${item['thumbnail']}`} alt='' className='h-auto w-9' />
+                          </td>
+                        )
+                      }
                       return (
                         <td key={label} className='px-6 py-4'>
-                          <img src={`http://localhost:8080${item['thumbnail']}`} alt='' className='h-auto w-9' />
+                          {item[label]}
                         </td>
                       )
-                    }
-                    return (
-                      <td key={label} className='px-6 py-4'>
-                        {item[label]}
-                      </td>
-                    )
-                  })}
-                  <td className='px-6 py-4'>
-                    {childrenEdit != false &&
-                      (childrenEdit || (
-                        <Link
-                          to={`edit/${item.id}`}
-                          className='font-medium text-blue-600 hover:underline dark:text-blue-500'
-                        >
-                          Edit
-                        </Link>
-                      ))}
-                  </td>
-                </tr>
-              ))}
+                    })}
+                    <td className='px-6 py-4'>
+                      {childrenEdit != false &&
+                        (childrenEdit || (
+                          <Link
+                            to={`edit/${item.id}`}
+                            className='font-medium text-blue-600 hover:underline dark:text-blue-500'
+                          >
+                            Edit
+                          </Link>
+                        ))}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

@@ -17,7 +17,7 @@ interface Props {
   value?: string
   ref?: any
   setValue?: UseFormSetValue<any>
-  defaultValue?: string
+  defaultValue?: string | number
 }
 const Input = forwardRef<HTMLInputElement, Props>(
   (

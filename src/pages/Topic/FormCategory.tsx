@@ -1,5 +1,5 @@
 import FormTopic from 'src/component/FormProduct/FormTopic'
-import { TopicInf } from 'src/types/Topic.type'
+import { TopicType } from 'src/types/Topic.type'
 
 const FormCategory = () => {
   // const { register, handleSubmit, watch, setValue } = useForm<FormValues>()
@@ -7,7 +7,7 @@ const FormCategory = () => {
   // 	data.code = data.name.split(' ').join('-')
   // 	console.log(data.code)
   // }
-  const onSubmit = (data: TopicInf) => {
+  const onSubmit = (data: Partial<TopicType>) => {
     console.log(data)
   }
   return (

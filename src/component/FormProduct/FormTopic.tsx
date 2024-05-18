@@ -4,18 +4,17 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import Editor from '../Editor/Editor'
 import { toast } from 'react-toastify'
-import { TopicInf } from 'src/types/Topic.type'
-const schema = yup
-  .object({
-    title: yup.string().required('Bạn cần nhập tên chủ đề'),
-    description: yup.string()
-  })
-  .required()
+import { TopicType } from 'src/types/Topic.type'
+const schema = yup.object().shape({
+  title: yup.string().required('Bạn cần nhập tên chủ đề'),
+  description: yup.string()
+})
+
 function FormTopic({
   onSubmit,
   defaultData = { title: '', description: '' }
 }: {
-  onSubmit: (data: TopicInf) => void
+  onSubmit: (data: Partial<TopicType>) => void
   defaultData?: { title: string; description: string }
 }) {
   const {
