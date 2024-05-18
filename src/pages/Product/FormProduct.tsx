@@ -3,10 +3,10 @@ import { AxiosRequestConfig } from 'axios'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { addPainting, getDetailPainting, PaintingReqType, updatePainting } from 'src/apis/product/painting.api'
+import { addPainting, getDetailPainting, updatePainting } from 'src/apis/product/painting.api'
 import { addTopic, getAllTopic } from 'src/apis/topics/topic.api'
 import { CheckboxData } from 'src/component/CheckBoxList/CheckBoxList'
-import FormArtwork from 'src/component/FormProduct/FormArtwork'
+import FormArtwork, { PaintingSubmitType } from 'src/component/FormProduct/FormArtwork'
 import { ProductContext } from 'src/contexts/pageContexts/product.context'
 import { TopicType } from 'src/types/Topic.type'
 
@@ -92,7 +92,7 @@ function FormProduct() {
     setShowPopupForm(false)
   }
 
-  const onSubmit = (data: PaintingReqType) => {
+  const onSubmit = (data: PaintingSubmitType) => {
     console.log(data)
     const formData = new FormData()
     if (id) {
@@ -105,7 +105,7 @@ function FormProduct() {
 
     // Thêm giá trị 'price'
     if (data.price) formData.append('price', data.price.toString())
-    if (data.inventory) formData.append('inventory', data.inventory.toString())
+    formData.append('inventory', (data.inventory ?? 0).toString())
 
     // Thêm giá trị 'length'
     if (data['length']) formData.append('length', data['length'].toString())

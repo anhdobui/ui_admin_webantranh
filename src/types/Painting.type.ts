@@ -1,9 +1,9 @@
 export type Painting = {
   id: number
   name: string
-  thumbnail: File
+  thumbnail: Blob
   thumbnailUrl: string
-  album: File[]
+  album: Blob[]
   albumUrl: string[]
   price: number
   width: number

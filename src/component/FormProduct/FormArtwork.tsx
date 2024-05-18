@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Input from '../Input'
@@ -16,20 +16,38 @@ import { TopicType } from 'src/types/Topic.type'
 
 const initDataDetailPainting: Partial<Painting> = {}
 const paintingBaseSchema = yup.object().shape({
-  name: yup.string().required('Bạn cần nhập tên cho tranh!')
+  name: yup.string().required('Bạn cần nhập tên cho tranh!'),
+  inventory: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => (originalValue === '' ? 0 : value))
+    .typeError('Tồn kho phải là 1 số'),
+  price: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => (originalValue === '' ? null : value))
+    .typeError('Giá phải là 1 số'),
+  length: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => (originalValue === '' ? null : value))
+    .typeError('Chiều dài phải là 1 số'),
+  width: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => (originalValue === '' ? null : value))
+    .typeError('Chiều rộng phải là 1 số'),
+  thickness: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => (originalValue === '' ? null : value))
+    .typeError('Độ dày phải là 1 số')
 })
-
-const dataTopics = [
-  { id: 1, label: 'Chủ đề 1', isChecked: false },
-  { id: 2, label: 'Chủ đề 2', isChecked: true },
-  { id: 3, label: 'Chủ đề 3', isChecked: false },
-  { id: 4, label: 'Chủ đề 4', isChecked: false },
-  { id: 5, label: 'Chủ đề 5', isChecked: false },
-  { id: 6, label: 'Chủ đề 6', isChecked: false }
-]
-
+export type PaintingSubmitType = {
+  [K in keyof PaintingReqType]: PaintingReqType[K] | null
+}
 interface FormArtworkInf {
-  onSubmit: (data: PaintingReqType) => void
+  onSubmit: (data: PaintingSubmitType) => void
   handleAddTopic: (data: Partial<TopicType>) => void
   defaultData?: Partial<Painting>
   dataTopics?: CheckboxData[]
@@ -70,11 +88,12 @@ function FormArtwork({ onSubmit, handleAddTopic, defaultData, dataTopics = [] }:
             label='Tồn kho'
             register={register}
             name='inventory'
-            type='number'
+            type='text'
             className='col-span-2'
             placeholder='tồn kho'
             setValue={setValue}
             defaultValue={dataDetailPainting.inventory}
+            errorMessage={errors?.inventory?.message}
           />
           <Grid className='col-span-6' cols={4}>
             <Input
@@ -86,36 +105,40 @@ function FormArtwork({ onSubmit, handleAddTopic, defaultData, dataTopics = [] }:
               placeholder='1000$'
               setValue={setValue}
               defaultValue={dataDetailPainting.price}
+              errorMessage={errors?.price?.message}
             />
             <Input
               label='Chiều rộng (cm)'
               register={register}
               name='width'
-              type='number'
+              type='text'
               className=''
               placeholder='100'
               setValue={setValue}
               defaultValue={dataDetailPainting.width}
+              errorMessage={errors?.width?.message}
             />
             <Input
               label='Chiều dài (cm)'
               register={register}
               name='length'
-              type='number'
+              type='text'
               className=''
               placeholder='200'
               setValue={setValue}
               defaultValue={dataDetailPainting.length}
+              errorMessage={errors?.length?.message}
             />
             <Input
               label='Độ dày (cm)'
               register={register}
               name='thickness'
-              type='number'
+              type='text'
               className=''
               placeholder='5'
               setValue={setValue}
               defaultValue={dataDetailPainting.thickness}
+              errorMessage={errors?.thickness?.message}
             />
           </Grid>
 
