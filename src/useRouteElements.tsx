@@ -18,6 +18,7 @@ import BillInventory from './pages/BillInventory/BillInventory'
 import WareHouse from './pages/WareHouse'
 import Orders from './pages/Orders'
 import Customer from './pages/Customer'
+import FormTopic from './pages/Topic/FormTopic'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -81,6 +82,10 @@ function useRouteElements() {
               path: '',
               index: true,
               element: <ViewCategory />
+            },
+            {
+              path: 'edit/:id',
+              element: <FormTopic />
             }
           ]
         },

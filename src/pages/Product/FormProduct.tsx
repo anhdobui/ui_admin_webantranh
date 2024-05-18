@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { addPainting, getDetailPainting, updatePainting } from 'src/apis/product/painting.api'
-import { addTopic, getAllTopic } from 'src/apis/topics/topic.api'
+import { addTopic, getTopics } from 'src/apis/topics/topic.api'
 import { CheckboxData } from 'src/component/CheckBoxList/CheckBoxList'
 import FormArtwork, { PaintingSubmitType } from 'src/component/FormProduct/FormArtwork'
 import { ProductContext } from 'src/contexts/pageContexts/product.context'
@@ -54,7 +54,7 @@ function FormProduct() {
   })
   const queryTopics = useQuery({
     queryKey: ['topics'],
-    queryFn: getAllTopic,
+    queryFn: getTopics,
     cacheTime: 0,
     select: (data) => {
       return data.data.map((item) => ({

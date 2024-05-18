@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { deleteAllPainting, getAllPainting } from 'src/apis/product/painting.api'
+import { deletePainting, getAllPainting } from 'src/apis/product/painting.api'
 import TableView from 'src/component/TableView'
 import { DataTableType } from 'src/types/DataTable.type'
 
@@ -42,7 +42,7 @@ function ViewProduct() {
     setDataTable(dataTable)
   }, [setDataTable, isLoading, data])
   const mutationDelete = useMutation({
-    mutationFn: async (body: number[]) => await deleteAllPainting(body),
+    mutationFn: async (body: number[]) => await deletePainting(body),
     onSuccess: (num) => {
       queryClient.invalidateQueries(['paintings'])
       toast.success('Xóa thành công ' + num.data + ' sản phẩm')

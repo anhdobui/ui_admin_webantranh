@@ -9,7 +9,7 @@ export const addPainting = (body: FormData, config?: AxiosRequestConfig) =>
 export const updatePainting = ({ body, id }: { body: FormData; id: number }, config?: AxiosRequestConfig) =>
   http.put<PaintingResType>(`/painting/${id}`, body, config)
 export const getAllPainting = () => http.get<PaintingResType[]>('/painting')
-export const deleteAllPainting = (body: number[]) =>
+export const deletePainting = (body: number[]) =>
   http.delete<number>('/painting', {
     data: body
   })

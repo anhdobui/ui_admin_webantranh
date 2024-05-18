@@ -7,10 +7,10 @@ type TableViewType = {
   buttonAdd?: string
   data: DataTableType
   childrenAdd?: ReactNode | boolean
-  childrenEdit?: ReactNode | boolean
+  showEdit?: boolean
   childrenDelete?: ReactNode | boolean
   isLoading?: boolean
-  onDelete: (data: number[]) => Promise<boolean>
+  onDelete?: (data: number[]) => Promise<boolean>
 }
 type ListDeleteType =
   | {
@@ -18,7 +18,15 @@ type ListDeleteType =
       [key: string]: boolean
     }
   | { all: boolean }
-function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete, isLoading, onDelete }: TableViewType) {
+function TableView({
+  buttonAdd,
+  data,
+  childrenAdd,
+  showEdit = true,
+  childrenDelete,
+  isLoading,
+  onDelete
+}: TableViewType) {
   const [isHiddenConfirmDelete, setIsHiddenConfirmDeletes] = useState(true)
   const [listDelete, setListDelete] = useState<any>({ all: false })
 
@@ -49,14 +57,15 @@ function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete,
         list.push(Number(key))
       }
     }
-    onDelete(list)
-      .then((res) => {
-        console.log(res)
-        setIsHiddenConfirmDeletes(true)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    onDelete &&
+      onDelete(list)
+        .then((res) => {
+          console.log(res)
+          setIsHiddenConfirmDeletes(true)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
   }
   return (
     <>
@@ -264,15 +273,14 @@ function TableView({ buttonAdd, data, childrenAdd, childrenEdit, childrenDelete,
                       )
                     })}
                     <td className='px-6 py-4'>
-                      {childrenEdit != false &&
-                        (childrenEdit || (
-                          <Link
-                            to={`edit/${item.id}`}
-                            className='font-medium text-blue-600 hover:underline dark:text-blue-500'
-                          >
-                            Edit
-                          </Link>
-                        ))}
+                      {showEdit && (
+                        <Link
+                          to={`edit/${item.id}`}
+                          className='font-medium text-blue-600 hover:underline dark:text-blue-500'
+                        >
+                          Edit
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))}

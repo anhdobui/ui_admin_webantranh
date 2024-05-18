@@ -1,51 +1,82 @@
-import { useContext, useEffect, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { addTopic, deleteTopics, getTopics } from 'src/apis/topics/topic.api'
 import FormTopic from 'src/component/FormProduct/FormTopic'
 import { ButtonOpenPopup, Popup, PopupContent } from 'src/component/PopupForm'
 import TableView from 'src/component/TableView'
 import { DataTableType } from 'src/types/DataTable.type'
-import { TopicInf } from 'src/types/Topic.type'
+import { TopicType } from 'src/types/Topic.type'
 
 function ViewCategory() {
-  const [dataTableCategory, setDataTableCategory] = useState<DataTableType>({
-    label: {},
-    dataRow: []
-  })
-  const data: DataTableType = {
+  const [dataTableTopic, setDataTableTopic] = useState<DataTableType>({
     label: {
-      name: 'Tên tập tranh',
-      countArtworks: 'Số tranh',
+      title: 'Tên chủ đề',
+      countPainting: 'Số tranh',
       createdDate: 'Ngày tạo',
       modifiedDate: 'Ngày sửa'
     },
-    dataRow: [
-      {
-        name: 'abc',
-        countArtworks: '5',
-        createdDate: '5/13/2024',
-        modifiedDate: '5/13/2024'
-      }
-    ]
-  }
+    dataRow: []
+  })
+
   const [showPopupAdd, setShowPopupAdd] = useState(false)
   const [showPopupEdit, setShowPopupEdit] = useState(false)
+  const queryTopics = useQuery({
+    queryKey: ['topics'],
+    queryFn: () => getTopics(),
+    cacheTime: 0,
+    select: (data) => {
+      return data.data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        countPainting: item.paintingIds.length,
+        createdDate: '5/18/2024',
+        modifiedDate: '5/18/2024'
+      }))
+    }
+  })
   useEffect(() => {
-    setDataTableCategory(data)
-  }, [])
-  const handleAddTopic = (data: TopicInf) => {
-    console.log(data)
-    toast.success('Thêm mới chủ đề ' + data.title + ' thành công')
+    if (!queryTopics.isLoading) {
+      setDataTableTopic((prev) => {
+        const dataRow = queryTopics.data ?? []
+        return { ...prev, dataRow: dataRow }
+      })
+    }
+  }, [queryTopics.isLoading, setDataTableTopic, queryTopics.data])
+  const mutationAdd = useMutation({
+    mutationFn: async (body: Partial<TopicType>) => await addTopic(body),
+    onSuccess: (num) => {
+      queryClient.invalidateQueries(['topics'])
+      toast.success('Thêm mới chủ đề ' + num.data.title + ' thành công')
+    }
+  })
+  const handleAddTopic = (data: Partial<TopicType>) => {
+    mutationAdd.mutate(data)
     setShowPopupAdd(false)
   }
-  const handleEditTopic = (data: TopicInf) => {
-    console.log(data)
-    toast.success('Sửa chủ đề ' + data.title + ' thành công')
-    setShowPopupEdit(false)
+  const queryClient = useQueryClient()
+  const mutationDelete = useMutation({
+    mutationFn: async (body: number[]) => await deleteTopics(body),
+    onSuccess: (num) => {
+      queryClient.invalidateQueries(['topics'])
+      toast.success('Xóa thành công ' + num.data + ' chủ đề')
+    }
+  })
+  const onDelete = async (data: number[]): Promise<boolean> => {
+    try {
+      await mutationDelete.mutateAsync(data)
+      return true
+    } catch (error) {
+      toast.error('Đã có lỗi xảy ra')
+      return false
+    }
   }
   return (
     <TableView
-      data={dataTableCategory}
+      isLoading={queryTopics.isLoading}
+      data={dataTableTopic}
       buttonAdd='Thêm mới chủ đề'
+      onDelete={onDelete}
       childrenAdd={
         <Popup
           title='Thêm mới chủ đề'
@@ -59,22 +90,6 @@ function ViewCategory() {
           />
           <PopupContent>
             <FormTopic onSubmit={handleAddTopic} />
-          </PopupContent>
-        </Popup>
-      }
-      childrenEdit={
-        <Popup
-          title='Sửa chủ đề'
-          className='col-span-2 flex flex-wrap  items-center '
-          showPopup={showPopupEdit}
-          setShowPopup={setShowPopupEdit}
-        >
-          <ButtonOpenPopup
-            className='justify-items-start font-medium text-blue-600 hover:underline dark:text-blue-500'
-            labelBtn='Edit'
-          />
-          <PopupContent>
-            <FormTopic defaultData={{ title: 'chu de 1', description: 'day la mo ta' }} onSubmit={handleEditTopic} />
           </PopupContent>
         </Popup>
       }
