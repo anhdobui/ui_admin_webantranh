@@ -93,6 +93,7 @@ function FormProduct() {
   }
 
   const onSubmit = (data: PaintingSubmitType) => {
+    if (typeof data.topicIds === 'string') data.topicIds = [data.topicIds]
     console.log(data)
     const formData = new FormData()
     if (id) {
