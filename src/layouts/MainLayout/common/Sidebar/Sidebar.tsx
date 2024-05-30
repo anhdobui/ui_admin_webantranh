@@ -1,3 +1,4 @@
+import { Logo } from 'src/component/Icons/Icons'
 import SidebarNav from 'src/component/SidebarNav/SidebarNav'
 
 function Sidebar() {
@@ -9,6 +10,14 @@ function Sidebar() {
     >
       <div className='h-full overflow-y-auto bg-white px-3 pb-4 dark:bg-gray-800'>
         <ul className='space-y-2 font-medium'>
+          <a
+            href='http://localhost:3000/'
+            target='_blank'
+            className='flex w-full cursor-pointer items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+          >
+            <Logo />
+            <span className='ml-3 flex-1 text-left'>Saatchi Art</span>
+          </a>
           <SidebarNav
             path='/'
             title='Dashboard'

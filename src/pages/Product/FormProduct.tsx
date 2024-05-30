@@ -154,6 +154,7 @@ function FormProduct() {
       defaultData={queryDetail.data}
       handleAddTopic={handleAddTopic}
       onSubmit={onSubmit}
+      isSubmitting={mutationPainting.isLoading}
     />
   )
 }
