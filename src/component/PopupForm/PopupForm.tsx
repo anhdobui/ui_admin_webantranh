@@ -27,13 +27,19 @@ const PopupContent: React.FC<PopupContentProps> = ({ children }) => {
 
 // Component Popup
 const Popup = ({
-  children,
+  propsButton,
+  childrenContent,
   title,
   className,
   showPopup,
   setShowPopup
 }: {
-  children: ReactNode[]
+  propsButton?: {
+    className?: string
+    labelBtn?: string
+    onClick?: () => void
+  }
+  childrenContent?: ReactNode
   title: string
   className?: string
   showPopup: boolean
@@ -45,27 +51,18 @@ const Popup = ({
   const handleClose = () => {
     setShowPopup(false)
   }
-  const buttonOpenPopup = [
-    children.find((item) => {
-      if ((item as any).type.name == 'ButtonOpenPopup') {
-        return true
-      }
-      return false
-    })
-  ].map((item, index) => {
-    const className = (item as any).props.className
-    const labelBtn = (item as any).props.labelBtn
-    return <ButtonOpenPopup key={index} onClick={handleButtonClick} labelBtn={labelBtn} className={className} />
-  })
-  const childrenPopupContent = children.filter((item) => {
-    if ((item as any).type.name != 'ButtonOpenPopup') {
-      return true
-    }
-    return false
-  })
   return (
     <div className={className}>
-      {buttonOpenPopup}
+      {propsButton && (
+        <ButtonOpenPopup
+          onClick={() => {
+            handleButtonClick()
+            propsButton.onClick && propsButton.onClick()
+          }}
+          labelBtn={propsButton.labelBtn}
+          className={propsButton.className}
+        />
+      )}
       {showPopup && (
         <ComponentPortal>
           <div className='fixed left-0 top-0  z-[1000] flex h-full w-full  items-center justify-center bg-gray-800 bg-opacity-50'>
@@ -79,7 +76,7 @@ const Popup = ({
                   X
                 </button>
               </div>
-              {childrenPopupContent}
+              {childrenContent}
             </div>
           </div>
         </ComponentPortal>

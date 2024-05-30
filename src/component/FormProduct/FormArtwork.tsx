@@ -156,15 +156,17 @@ function FormArtwork({ onSubmit, handleAddTopic, defaultData, dataTopics = [], i
               className='col-span-2 flex flex-wrap  items-center justify-end'
               showPopup={showPopupForm}
               setShowPopup={setShowPopupForm}
-            >
-              <ButtonOpenPopup
-                className='mb-2 h-11  flex-shrink-0 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'
-                labelBtn='Thêm chủ đề'
-              />
-              <PopupContent>
-                <FormTopic onSubmit={handleAddTopic} />
-              </PopupContent>
-            </Popup>
+              propsButton={{
+                className:
+                  'mb-2 h-11  flex-shrink-0 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                labelBtn: 'Thêm chủ đề'
+              }}
+              childrenContent={
+                <PopupContent>
+                  <FormTopic onSubmit={handleAddTopic} />
+                </PopupContent>
+              }
+            ></Popup>
           </CheckboxList>
 
           <InputFile

@@ -25,33 +25,7 @@ function ViewInventory() {
   useEffect(() => {
     setdataTableInventory(data)
   }, [setdataTableInventory])
-  return (
-    <TableView
-      data={dataTableInventory}
-      buttonAdd='Thêm mới đơn'
-      childrenDelete={false}
-      childrenEdit={
-        <Popup
-          title='Chi tiết đơn nhập'
-          className='col-span-2 flex flex-wrap  items-center justify-start'
-          showPopup={showPopupDetail}
-          setShowPopup={setShowPopupDetail}
-        >
-          <ButtonOpenPopup
-            className='mb-2 h-5 w-auto'
-            labelBtn={
-              <div className='flex items-center justify-center'>
-                <span className='ml-2 text-base text-blue-700 hover:underline'>Detail</span>
-              </div>
-            }
-          />
-          <PopupContent>
-            <h1>s</h1>
-          </PopupContent>
-        </Popup>
-      }
-    />
-  )
+  return <TableView data={dataTableInventory} buttonAdd='Thêm mới đơn' childrenDelete={false} />
 }
 
 export default ViewInventory
