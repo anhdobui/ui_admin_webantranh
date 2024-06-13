@@ -132,6 +132,7 @@ function Dashboard() {
           }))
       )
   }, [queryCubesYear.data, setDataYearLineChart])
+
   return (
     <div className='flex flex-col items-center p-6'>
       <div className='mb-6 grid w-full grid-cols-5 gap-6'>
