@@ -41,6 +41,7 @@ function FormProduct() {
     select: (data) => ({
       id: data.data.id,
       name: data.data.name,
+      artist: data.data.artist,
       length: data.data.length,
       width: data.data.width,
       thickness: data.data.thickness,
@@ -102,6 +103,9 @@ function FormProduct() {
     // Thêm giá trị 'name'
     if (typeof data.name === 'string' && data.name) {
       formData.append('name', data.name)
+    }
+    if (typeof data.artist === 'string' && data.artist) {
+      formData.append('artist', data.artist)
     }
 
     // Thêm giá trị 'price'

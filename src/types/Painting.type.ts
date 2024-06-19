@@ -6,6 +6,7 @@ export type Painting = {
   album: Blob[]
   albumUrl: string[]
   price: number
+  artist: string
   width: number
   length: number
   inventory: number

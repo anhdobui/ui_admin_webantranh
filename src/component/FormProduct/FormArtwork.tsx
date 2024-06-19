@@ -17,6 +17,7 @@ import { TopicType } from 'src/types/Topic.type'
 const initDataDetailPainting: Partial<Painting> = {}
 const paintingBaseSchema = yup.object().shape({
   name: yup.string().required('Bạn cần nhập tên cho tranh!'),
+  artist: yup.string().required('Bạn cần nhập tên tác giả'),
   inventory: yup
     .number()
     .nullable()
@@ -80,10 +81,21 @@ function FormArtwork({ onSubmit, handleAddTopic, defaultData, dataTopics = [], i
             register={register}
             name='name'
             type='text'
-            className='col-span-4'
+            className='col-span-2'
             placeholder='Mona Lisa'
             setValue={setValue}
             defaultValue={dataDetailPainting.name}
+          />
+          <Input
+            errorMessage={errors?.artist?.message}
+            label='Tên tác giả'
+            register={register}
+            name='artist'
+            type='text'
+            className='col-span-2'
+            placeholder='Robert Bubel'
+            setValue={setValue}
+            defaultValue={dataDetailPainting.artist}
           />
           <Input
             label='Tồn kho'
